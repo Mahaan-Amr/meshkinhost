@@ -1,0 +1,202 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  createdAt    DateTime @default(now())
+}
+
+model SiteSettings {
+  id                 String   @id @default(cuid())
+  brandName          String
+  logoUrl            String
+  primaryColor       String
+  secondaryColor     String
+  accentColor        String
+  heroBackgroundUrl  String
+  contactEmail       String
+  supportPhone       String
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+}
+
+model Hero {
+  id            String   @id @default(cuid())
+  title_en      String
+  title_fa      String
+  subtitle_en   String
+  subtitle_fa   String
+  ctaText_en    String
+  ctaText_fa    String
+  ctaUrl        String
+  backgroundUrl String
+  isActive      Boolean  @default(true)
+  sortOrder     Int      @default(0)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model Feature {
+  id        String   @id @default(cuid())
+  title_en  String
+  title_fa  String
+  body_en   String
+  body_fa   String
+  iconName  String
+  isActive  Boolean  @default(true)
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Plan {
+  id           String   @id @default(cuid())
+  name_en      String
+  name_fa      String
+  priceMonthly Float
+  priceYearly  Float
+  currency     String
+  tagline_en   String
+  tagline_fa   String
+  features     Json
+  isPopular    Boolean  @default(false)
+  ctaText_en   String
+  ctaText_fa   String
+  ctaUrl       String
+  isActive     Boolean  @default(true)
+  sortOrder    Int      @default(0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model ServiceCategory {
+  id         String   @id @default(cuid())
+  name_en    String
+  name_fa    String
+  slug       String   @unique
+  summary_en String
+  summary_fa String
+  iconName   String
+  imageUrl   String
+  isActive   Boolean  @default(true)
+  sortOrder  Int      @default(0)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model WhyUsItem {
+  id        String   @id @default(cuid())
+  title_en  String
+  title_fa  String
+  body_en   String
+  body_fa   String
+  imageUrl  String
+  isActive  Boolean  @default(true)
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model VideoSection {
+  id        String   @id @default(cuid())
+  title_en  String
+  title_fa  String
+  body_en   String
+  body_fa   String
+  embedUrl  String
+  posterUrl String
+  isActive  Boolean  @default(true)
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model PracticalFeature {
+  id        String   @id @default(cuid())
+  title_en  String
+  title_fa  String
+  body_en   String
+  body_fa   String
+  iconName  String
+  isActive  Boolean  @default(true)
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Brand {
+  id         String   @id @default(cuid())
+  name       String
+  logoUrl    String
+  websiteUrl String
+  isActive   Boolean  @default(true)
+  sortOrder  Int      @default(0)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model Testimonial {
+  id         String   @id @default(cuid())
+  personName String
+  role_en    String
+  role_fa    String
+  company_en String
+  company_fa String
+  quote_en   String
+  quote_fa   String
+  avatarUrl  String
+  isActive   Boolean  @default(true)
+  sortOrder  Int      @default(0)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model Faq {
+  id          String   @id @default(cuid())
+  question_en String
+  question_fa String
+  answer_en   String
+  answer_fa   String
+  isActive    Boolean  @default(true)
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model PageSectionOrder {
+  id         String   @id @default(cuid())
+  pageSlug   String
+  sectionKey String
+  sortOrder  Int      @default(0)
+  isActive   Boolean  @default(true)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@unique([pageSlug, sectionKey], name: "pageSlug_sectionKey")
+}
+
+model Upload {
+  id        String   @id @default(cuid())
+  filePath  String
+  fileName  String
+  mimeType  String
+  size      Int
+  createdAt DateTime @default(now())
+}
+
+model Lead {
+  id         String   @id @default(cuid())
+  name       String
+  email      String
+  message    String
+  sourcePage String
+  createdAt  DateTime @default(now())
+}
