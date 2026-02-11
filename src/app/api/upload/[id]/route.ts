@@ -7,9 +7,10 @@ export const runtime = "nodejs";
 
 export async function DELETE(
   _req: Request,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
-  const upload = await prisma.upload.findUnique({ where: { id: params.id } });
+  const { id } = await context.params;
+  const upload = await prisma.upload.findUnique({ where: { id } });
   if (!upload) {
     return NextResponse.json({ ok: true });
   }
@@ -18,6 +19,6 @@ export async function DELETE(
   if (fs.existsSync(absolutePath)) {
     fs.unlinkSync(absolutePath);
   }
-  await prisma.upload.delete({ where: { id: params.id } });
+  await prisma.upload.delete({ where: { id } });
   return NextResponse.json({ ok: true });
 }

@@ -18,6 +18,12 @@ type BlurTextProps = {
   onAnimationComplete?: () => void;
 };
 
+const easingMap: Record<string, (t: number) => number> = {
+  linear: (t) => t,
+  easeOutCubic: (t) => 1 - (1 - t) ** 3,
+  easeInOutCubic: (t) => (t < 0.5 ? 4 * t ** 3 : 1 - (-2 * t + 2) ** 3 / 2),
+};
+
 export default function BlurText({
   text,
   delay = 140,
@@ -71,7 +77,7 @@ export default function BlurText({
     elements.map((_, i) => ({
       from: animationFrom || defaultFrom,
       to: inView
-        ? async (next: (props: CSSProperties) => Promise<void>) => {
+        ? async (next: (props: CSSProperties) => Promise<unknown>) => {
             for (const step of animationTo || defaultTo) {
               await next(step);
             }
@@ -82,7 +88,7 @@ export default function BlurText({
           }
         : animationFrom || defaultFrom,
       delay: i * delay,
-      config: { easing }
+      config: { easing: easingMap[easing] ?? easingMap.easeOutCubic }
     }))
   );
 

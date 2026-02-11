@@ -4,9 +4,9 @@ import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 
 function normalize(value: FormDataEntryValue | null) {
-  if (typeof value !== "string") return null;
+  if (typeof value !== "string") return "";
   const trimmed = value.trim();
-  return trimmed.length === 0 ? null : trimmed;
+  return trimmed.length === 0 ? "" : trimmed;
 }
 
 export async function updateSettings(formData: FormData) {

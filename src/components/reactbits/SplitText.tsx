@@ -17,6 +17,12 @@ type SplitTextProps = {
   onLetterAnimationComplete?: () => void;
 };
 
+const easingMap: Record<string, (t: number) => number> = {
+  linear: (t) => t,
+  easeOutCubic: (t) => 1 - (1 - t) ** 3,
+  easeInOutCubic: (t) => (t < 0.5 ? 4 * t ** 3 : 1 - (-2 * t + 2) ** 3 / 2),
+};
+
 export default function SplitText({
   text,
   className = "",
@@ -55,7 +61,7 @@ export default function SplitText({
     letters.map((_, i) => ({
       from: animationFrom,
       to: inView
-        ? async (next: (props: CSSProperties) => Promise<void>) => {
+        ? async (next: (props: CSSProperties) => Promise<unknown>) => {
             await next(animationTo);
             animatedCount.current += 1;
             if (animatedCount.current === letters.length && onLetterAnimationComplete) {
@@ -64,7 +70,7 @@ export default function SplitText({
           }
         : animationFrom,
       delay: i * delay,
-      config: { easing }
+      config: { easing: easingMap[easing] ?? easingMap.easeOutCubic }
     }))
   );
 
